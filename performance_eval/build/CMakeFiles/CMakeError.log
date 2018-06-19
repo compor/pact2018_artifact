@@ -1,0 +1,23 @@
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+Compiler: /opt/intel/compilers_and_libraries_2017.4.196/linux/bin/intel64/icpc 
+Build flags: ;xCORE-AVX2;-axMIC-AVX512
+Id flags:  
+
+The output was:
+1
+icpc: error #10236: File not found:  'xCORE-AVX2'
+
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+Compiler: /opt/intel/compilers_and_libraries_2017.4.196/linux/bin/intel64/icpc 
+Build flags: ;xCORE-AVX2;-axMIC-AVX512
+Id flags: -c 
+
+The output was:
+1
+icpc: error #10236: File not found:  'xCORE-AVX2'
+
+
+Checking whether the CXX compiler is IAR using "" did not match "IAR .+ Compiler":
+icpc: error #10236: File not found:  'xCORE-AVX2'
+icpc: command line error: no files specified; for help type "icpc -help"

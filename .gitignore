@@ -1,0 +1,9 @@
+build/*
+.idea
+cmake-build-debug/*
+*.bak
+*.frel
+*.out
+.ycm_extra_conf.py
+CodeGen/codegen
+type_repo.txt
