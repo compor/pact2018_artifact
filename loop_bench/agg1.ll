@@ -3,8 +3,9 @@ source_filename = "agg1.cpp"
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%"class.std::basic_string" = type { %"struct.std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Alloc_hider" }
-%"struct.std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Alloc_hider" = type { i8* }
+%"class.std::__cxx11::basic_string" = type { %"struct.std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Alloc_hider", i64, %union.anon }
+%"struct.std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Alloc_hider" = type { i8* }
+%union.anon = type { i64, [8 x i8] }
 %"class.std::vector" = type { %"struct.std::_Vector_base" }
 %"struct.std::_Vector_base" = type { %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl" }
 %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl" = type { i32*, i32*, i32* }
@@ -14,13 +15,15 @@ target triple = "x86_64-unknown-linux-gnu"
 
 $_ZNSt6vectorIiSaIiEEC2Ev = comdat any
 
-$_ZSteqIcSt11char_traitsIcESaIcEEbRKSbIT_T0_T1_EPKS3_ = comdat any
+$_ZSteqIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_ = comdat any
 
 $_ZNSt6vectorIiSaIiEE9push_backERKi = comdat any
 
 $_ZNSt6vectorIiSaIiEED2Ev = comdat any
 
 $_ZNSt12_Vector_baseIiSaIiEEC2Ev = comdat any
+
+$__clang_call_terminate = comdat any
 
 $_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2Ev = comdat any
 
@@ -34,8 +37,6 @@ $_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv = comdat any
 
 $_ZNSt12_Vector_baseIiSaIiEED2Ev = comdat any
 
-$__clang_call_terminate = comdat any
-
 $_ZSt8_DestroyIPiEvT_S1_ = comdat any
 
 $_ZNSt12_Destroy_auxILb1EE9__destroyIPiEEvT_S3_ = comdat any
@@ -44,21 +45,21 @@ $_ZNSt12_Vector_baseIiSaIiEE13_M_deallocateEPim = comdat any
 
 $_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev = comdat any
 
+$_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim = comdat any
+
 $_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim = comdat any
 
 $_ZNSaIiED2Ev = comdat any
 
 $_ZN9__gnu_cxx13new_allocatorIiED2Ev = comdat any
 
-$_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEDTcl12_S_constructfp_fp0_spclsr3stdE7forwardIT0_Efp1_EEERS0_PT_DpOS5_ = comdat any
+$_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_ = comdat any
 
 $_ZNSt6vectorIiSaIiEE19_M_emplace_back_auxIJRKiEEEvDpOT_ = comdat any
 
-$_ZNSt16allocator_traitsISaIiEE12_S_constructIiJRKiEEENSt9enable_ifIXsr18__construct_helperIT_DpT0_EE5valueEvE4typeERS0_PS6_DpOS7_ = comdat any
+$_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_ = comdat any
 
 $_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE = comdat any
-
-$_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_ = comdat any
 
 $_ZNKSt6vectorIiSaIiEE12_M_check_lenEmPKc = comdat any
 
@@ -78,9 +79,9 @@ $_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_ = comdat any
 
 $_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv = comdat any
 
-$_ZNSt16allocator_traitsISaIiEE11_S_max_sizeIKS0_EENSt9enable_ifIXsr16__maxsize_helperIT_EE5valueEmE4typeERS5_ = comdat any
-
 $_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv = comdat any
+
+$_ZNSt16allocator_traitsISaIiEE8allocateERS0_m = comdat any
 
 $_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv = comdat any
 
@@ -112,8 +113,6 @@ $_ZNKSt13move_iteratorIPiE4baseEv = comdat any
 
 $_ZNSt13move_iteratorIPiEC2ES0_ = comdat any
 
-$_ZNSt16allocator_traitsISaIiEE10_S_destroyIiEENSt9enable_ifIXsr16__destroy_helperIT_EE5valueEvE4typeERS0_PS4_ = comdat any
-
 $_ZN9__gnu_cxx13new_allocatorIiE7destroyIiEEvPT_ = comdat any
 
 @.str = private unnamed_addr constant [10 x i8] c"PushEvent\00", align 1
@@ -121,21 +120,21 @@ $_ZN9__gnu_cxx13new_allocatorIiE7destroyIiEEvPT_ = comdat any
 @.str.2 = private unnamed_addr constant [28 x i8] c"vector::_M_emplace_back_aux\00", align 1
 
 ; Function Attrs: noinline optnone uwtable
-define void @_Z6serialiPSs(i32 %nlines, %"class.std::basic_string"* %A) #0 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
+define void @_Z6serialiPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE(i32 %nlines, %"class.std::__cxx11::basic_string"* %A) #0 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
 entry:
   %nlines.addr = alloca i32, align 4
-  %A.addr = alloca %"class.std::basic_string"*, align 8
+  %A.addr = alloca %"class.std::__cxx11::basic_string"*, align 8
   %res = alloca %"class.std::vector", align 8
   %pushed = alloca i32, align 4
   %count = alloca i32, align 4
   %i = alloca i32, align 4
-  %type = alloca %"class.std::basic_string", align 8
+  %type = alloca %"class.std::__cxx11::basic_string", align 8
   %exn.slot = alloca i8*
   %ehselector.slot = alloca i32
-  %id = alloca %"class.std::basic_string", align 8
+  %id = alloca %"class.std::__cxx11::basic_string", align 8
   store i32 %nlines, i32* %nlines.addr, align 4
-  store %"class.std::basic_string"* %A, %"class.std::basic_string"** %A.addr, align 8
-  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %res)
+  store %"class.std::__cxx11::basic_string"* %A, %"class.std::__cxx11::basic_string"** %A.addr, align 8
+  call void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %res) #10
   store i32 0, i32* %pushed, align 4
   store i32 0, i32* %count, align 4
   store i32 0, i32* %i, align 4
@@ -148,32 +147,32 @@ for.cond:                                         ; preds = %for.inc, %entry
   br i1 %cmp, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
-  %2 = load %"class.std::basic_string"*, %"class.std::basic_string"** %A.addr, align 8
+  %2 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %A.addr, align 8
   %3 = load i32, i32* %i, align 4
   %mul = mul nsw i32 2, %3
   %idxprom = sext i32 %mul to i64
-  %arrayidx = getelementptr inbounds %"class.std::basic_string", %"class.std::basic_string"* %2, i64 %idxprom
-  invoke void @_ZNSsC1ERKSs(%"class.std::basic_string"* %type, %"class.std::basic_string"* dereferenceable(8) %arrayidx)
+  %arrayidx = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %2, i64 %idxprom
+  invoke void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_(%"class.std::__cxx11::basic_string"* %type, %"class.std::__cxx11::basic_string"* dereferenceable(32) %arrayidx)
           to label %invoke.cont unwind label %lpad
 
 invoke.cont:                                      ; preds = %for.body
-  %4 = load %"class.std::basic_string"*, %"class.std::basic_string"** %A.addr, align 8
+  %4 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %A.addr, align 8
   %5 = load i32, i32* %i, align 4
   %mul1 = mul nsw i32 2, %5
   %add = add nsw i32 %mul1, 1
   %idxprom2 = sext i32 %add to i64
-  %arrayidx3 = getelementptr inbounds %"class.std::basic_string", %"class.std::basic_string"* %4, i64 %idxprom2
-  invoke void @_ZNSsC1ERKSs(%"class.std::basic_string"* %id, %"class.std::basic_string"* dereferenceable(8) %arrayidx3)
+  %arrayidx3 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %4, i64 %idxprom2
+  invoke void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_(%"class.std::__cxx11::basic_string"* %id, %"class.std::__cxx11::basic_string"* dereferenceable(32) %arrayidx3)
           to label %invoke.cont5 unwind label %lpad4
 
 invoke.cont5:                                     ; preds = %invoke.cont
-  %call = call i8* @_ZNKSs5c_strEv(%"class.std::basic_string"* %id) #10
+  %call = call i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"* %id) #10
   %call6 = call i32 @atoi(i8* %call) #11
   %cmp7 = icmp eq i32 %call6, 1579990
   br i1 %cmp7, label %if.then, label %if.end21
 
 if.then:                                          ; preds = %invoke.cont5
-  %call10 = invoke zeroext i1 @_ZSteqIcSt11char_traitsIcESaIcEEbRKSbIT_T0_T1_EPKS3_(%"class.std::basic_string"* dereferenceable(8) %type, i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str, i32 0, i32 0))
+  %call10 = invoke zeroext i1 @_ZSteqIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_(%"class.std::__cxx11::basic_string"* dereferenceable(32) %type, i8* getelementptr inbounds ([10 x i8], [10 x i8]* @.str, i32 0, i32 0))
           to label %invoke.cont9 unwind label %lpad8
 
 invoke.cont9:                                     ; preds = %if.then
@@ -209,11 +208,11 @@ lpad8:                                            ; preds = %if.then15, %if.else
   store i8* %13, i8** %exn.slot, align 8
   %14 = extractvalue { i8*, i32 } %12, 1
   store i32 %14, i32* %ehselector.slot, align 4
-  call void @_ZNSsD1Ev(%"class.std::basic_string"* %id) #10
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %id) #10
   br label %ehcleanup
 
 if.else:                                          ; preds = %invoke.cont9
-  %call13 = invoke zeroext i1 @_ZSteqIcSt11char_traitsIcESaIcEEbRKSbIT_T0_T1_EPKS3_(%"class.std::basic_string"* dereferenceable(8) %type, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.1, i32 0, i32 0))
+  %call13 = invoke zeroext i1 @_ZSteqIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_(%"class.std::__cxx11::basic_string"* dereferenceable(32) %type, i8* getelementptr inbounds ([17 x i8], [17 x i8]* @.str.1, i32 0, i32 0))
           to label %invoke.cont12 unwind label %lpad8
 
 invoke.cont12:                                    ; preds = %if.else
@@ -253,8 +252,8 @@ if.end20:                                         ; preds = %if.end19, %if.then1
   br label %if.end21
 
 if.end21:                                         ; preds = %if.end20, %invoke.cont5
-  call void @_ZNSsD1Ev(%"class.std::basic_string"* %id) #10
-  call void @_ZNSsD1Ev(%"class.std::basic_string"* %type) #10
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %id) #10
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %type) #10
   br label %for.inc
 
 for.inc:                                          ; preds = %if.end21
@@ -264,7 +263,7 @@ for.inc:                                          ; preds = %if.end21
   br label %for.cond
 
 ehcleanup:                                        ; preds = %lpad8, %lpad4
-  call void @_ZNSsD1Ev(%"class.std::basic_string"* %type) #10
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* %type) #10
   br label %ehcleanup23
 
 for.end:                                          ; preds = %for.cond
@@ -283,37 +282,47 @@ eh.resume:                                        ; preds = %ehcleanup23
   resume { i8*, i32 } %lpad.val24
 }
 
-; Function Attrs: noinline optnone uwtable
-define linkonce_odr void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %this) unnamed_addr #0 comdat align 2 {
+; Function Attrs: noinline nounwind optnone uwtable
+define linkonce_odr void @_ZNSt6vectorIiSaIiEEC2Ev(%"class.std::vector"* %this) unnamed_addr #1 comdat align 2 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
 entry:
   %this.addr = alloca %"class.std::vector"*, align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %this.addr, align 8
   %this1 = load %"class.std::vector"*, %"class.std::vector"** %this.addr, align 8
   %0 = bitcast %"class.std::vector"* %this1 to %"struct.std::_Vector_base"*
-  call void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %0)
+  invoke void @_ZNSt12_Vector_baseIiSaIiEEC2Ev(%"struct.std::_Vector_base"* %0)
+          to label %invoke.cont unwind label %terminate.lpad
+
+invoke.cont:                                      ; preds = %entry
   ret void
+
+terminate.lpad:                                   ; preds = %entry
+  %1 = landingpad { i8*, i32 }
+          catch i8* null
+  %2 = extractvalue { i8*, i32 } %1, 0
+  call void @__clang_call_terminate(i8* %2) #12
+  unreachable
 }
 
-declare void @_ZNSsC1ERKSs(%"class.std::basic_string"*, %"class.std::basic_string"* dereferenceable(8)) unnamed_addr #1
+declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_(%"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"* dereferenceable(32)) unnamed_addr #2
 
 declare i32 @__gxx_personality_v0(...)
 
 ; Function Attrs: nounwind readonly
-declare i32 @atoi(i8*) #2
+declare i32 @atoi(i8*) #3
 
 ; Function Attrs: nounwind
-declare i8* @_ZNKSs5c_strEv(%"class.std::basic_string"*) #3
+declare i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"*) #4
 
 ; Function Attrs: noinline optnone uwtable
-define linkonce_odr zeroext i1 @_ZSteqIcSt11char_traitsIcESaIcEEbRKSbIT_T0_T1_EPKS3_(%"class.std::basic_string"* dereferenceable(8) %__lhs, i8* %__rhs) #0 comdat {
+define linkonce_odr zeroext i1 @_ZSteqIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_(%"class.std::__cxx11::basic_string"* dereferenceable(32) %__lhs, i8* %__rhs) #0 comdat {
 entry:
-  %__lhs.addr = alloca %"class.std::basic_string"*, align 8
+  %__lhs.addr = alloca %"class.std::__cxx11::basic_string"*, align 8
   %__rhs.addr = alloca i8*, align 8
-  store %"class.std::basic_string"* %__lhs, %"class.std::basic_string"** %__lhs.addr, align 8
+  store %"class.std::__cxx11::basic_string"* %__lhs, %"class.std::__cxx11::basic_string"** %__lhs.addr, align 8
   store i8* %__rhs, i8** %__rhs.addr, align 8
-  %0 = load %"class.std::basic_string"*, %"class.std::basic_string"** %__lhs.addr, align 8
+  %0 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %__lhs.addr, align 8
   %1 = load i8*, i8** %__rhs.addr, align 8
-  %call = call i32 @_ZNKSs7compareEPKc(%"class.std::basic_string"* %0, i8* %1)
+  %call = call i32 @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareEPKc(%"class.std::__cxx11::basic_string"* %0, i8* %1)
   %cmp = icmp eq i32 %call, 0
   ret i1 %cmp
 }
@@ -346,7 +355,7 @@ if.then:                                          ; preds = %entry
   %_M_finish5 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl", %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl4, i32 0, i32 1
   %7 = load i32*, i32** %_M_finish5, align 8
   %8 = load i32*, i32** %__x.addr, align 8
-  call void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEDTcl12_S_constructfp_fp0_spclsr3stdE7forwardIT0_Efp1_EEERS0_PT_DpOS5_(%"class.std::allocator.0"* dereferenceable(1) %5, i32* %7, i32* dereferenceable(4) %8)
+  call void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_(%"class.std::allocator.0"* dereferenceable(1) %5, i32* %7, i32* dereferenceable(4) %8)
   %9 = bitcast %"class.std::vector"* %this1 to %"struct.std::_Vector_base"*
   %_M_impl6 = getelementptr inbounds %"struct.std::_Vector_base", %"struct.std::_Vector_base"* %9, i32 0, i32 0
   %_M_finish7 = getelementptr inbounds %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl", %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl6, i32 0, i32 1
@@ -365,10 +374,10 @@ if.end:                                           ; preds = %if.else, %if.then
 }
 
 ; Function Attrs: nounwind
-declare void @_ZNSsD1Ev(%"class.std::basic_string"*) unnamed_addr #3
+declare void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"*) unnamed_addr #4
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %this) unnamed_addr #4 comdat align 2 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
+define linkonce_odr void @_ZNSt6vectorIiSaIiEED2Ev(%"class.std::vector"* %this) unnamed_addr #1 comdat align 2 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
 entry:
   %this.addr = alloca %"class.std::vector"*, align 8
   %exn.slot = alloca i8*
@@ -421,8 +430,19 @@ entry:
   ret void
 }
 
+; Function Attrs: noinline noreturn nounwind
+define linkonce_odr hidden void @__clang_call_terminate(i8*) #5 comdat {
+  %2 = call i8* @__cxa_begin_catch(i8* %0) #10
+  call void @_ZSt9terminatev() #12
+  unreachable
+}
+
+declare i8* @__cxa_begin_catch(i8*)
+
+declare void @_ZSt9terminatev()
+
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #4 comdat align 2 {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implC2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #1 comdat align 2 {
 entry:
   %this.addr = alloca %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"*, align 8
   store %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %this.addr, align 8
@@ -439,7 +459,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZNSaIiEC2Ev(%"class.std::allocator.0"* %this) unnamed_addr #4 comdat align 2 {
+define linkonce_odr void @_ZNSaIiEC2Ev(%"class.std::allocator.0"* %this) unnamed_addr #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.std::allocator.0"*, align 8
   store %"class.std::allocator.0"* %this, %"class.std::allocator.0"** %this.addr, align 8
@@ -450,7 +470,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx::new_allocator.1"* %this) unnamed_addr #4 comdat align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiEC2Ev(%"class.__gnu_cxx::new_allocator.1"* %this) unnamed_addr #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.__gnu_cxx::new_allocator.1"*, align 8
   store %"class.__gnu_cxx::new_allocator.1"* %this, %"class.__gnu_cxx::new_allocator.1"** %this.addr, align 8
@@ -474,7 +494,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr dereferenceable(1) %"class.std::allocator.0"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %this) #4 comdat align 2 {
+define linkonce_odr dereferenceable(1) %"class.std::allocator.0"* @_ZNSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %this) #1 comdat align 2 {
 entry:
   %this.addr = alloca %"struct.std::_Vector_base"*, align 8
   store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %this.addr, align 8
@@ -485,7 +505,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %this) unnamed_addr #4 comdat align 2 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEED2Ev(%"struct.std::_Vector_base"* %this) unnamed_addr #1 comdat align 2 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
 entry:
   %this.addr = alloca %"struct.std::_Vector_base"*, align 8
   %exn.slot = alloca i8*
@@ -515,32 +535,20 @@ invoke.cont:                                      ; preds = %entry
 
 lpad:                                             ; preds = %entry
   %3 = landingpad { i8*, i32 }
-          cleanup
-          filter [0 x i8*] zeroinitializer
+          catch i8* null
   %4 = extractvalue { i8*, i32 } %3, 0
   store i8* %4, i8** %exn.slot, align 8
   %5 = extractvalue { i8*, i32 } %3, 1
   store i32 %5, i32* %ehselector.slot, align 4
   %_M_impl6 = getelementptr inbounds %"struct.std::_Vector_base", %"struct.std::_Vector_base"* %this1, i32 0, i32 0
   call void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl6) #10
-  br label %filter.dispatch
+  br label %terminate.handler
 
-filter.dispatch:                                  ; preds = %lpad
+terminate.handler:                                ; preds = %lpad
   %exn = load i8*, i8** %exn.slot, align 8
-  call void @__cxa_call_unexpected(i8* %exn) #13
+  call void @__clang_call_terminate(i8* %exn) #12
   unreachable
 }
-
-; Function Attrs: noinline noreturn nounwind
-define linkonce_odr hidden void @__clang_call_terminate(i8*) #5 comdat {
-  %2 = call i8* @__cxa_begin_catch(i8* %0) #10
-  call void @_ZSt9terminatev() #12
-  unreachable
-}
-
-declare i8* @__cxa_begin_catch(i8*)
-
-declare void @_ZSt9terminatev()
 
 ; Function Attrs: noinline optnone uwtable
 define linkonce_odr void @_ZSt8_DestroyIPiEvT_S1_(i32* %__first, i32* %__last) #0 comdat {
@@ -556,7 +564,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZNSt12_Destroy_auxILb1EE9__destroyIPiEEvT_S3_(i32*, i32*) #4 comdat align 2 {
+define linkonce_odr void @_ZNSt12_Destroy_auxILb1EE9__destroyIPiEEvT_S3_(i32*, i32*) #1 comdat align 2 {
 entry:
   %.addr = alloca i32*, align 8
   %.addr1 = alloca i32*, align 8
@@ -581,10 +589,10 @@ entry:
 
 if.then:                                          ; preds = %entry
   %_M_impl = getelementptr inbounds %"struct.std::_Vector_base", %"struct.std::_Vector_base"* %this1, i32 0, i32 0
-  %1 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl to %"class.__gnu_cxx::new_allocator.1"*
+  %1 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl to %"class.std::allocator.0"*
   %2 = load i32*, i32** %__p.addr, align 8
   %3 = load i64, i64* %__n.addr, align 8
-  call void @_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim(%"class.__gnu_cxx::new_allocator.1"* %1, i32* %2, i64 %3)
+  call void @_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim(%"class.std::allocator.0"* dereferenceable(1) %1, i32* %2, i64 %3)
   br label %if.end
 
 if.end:                                           ; preds = %if.then, %entry
@@ -592,7 +600,7 @@ if.end:                                           ; preds = %if.then, %entry
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #4 comdat align 2 {
+define linkonce_odr void @_ZNSt12_Vector_baseIiSaIiEE12_Vector_implD2Ev(%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this) unnamed_addr #1 comdat align 2 {
 entry:
   %this.addr = alloca %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"*, align 8
   store %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %this, %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"** %this.addr, align 8
@@ -602,10 +610,25 @@ entry:
   ret void
 }
 
-declare void @__cxa_call_unexpected(i8*)
+; Function Attrs: noinline optnone uwtable
+define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE10deallocateERS0_Pim(%"class.std::allocator.0"* dereferenceable(1) %__a, i32* %__p, i64 %__n) #0 comdat align 2 {
+entry:
+  %__a.addr = alloca %"class.std::allocator.0"*, align 8
+  %__p.addr = alloca i32*, align 8
+  %__n.addr = alloca i64, align 8
+  store %"class.std::allocator.0"* %__a, %"class.std::allocator.0"** %__a.addr, align 8
+  store i32* %__p, i32** %__p.addr, align 8
+  store i64 %__n, i64* %__n.addr, align 8
+  %0 = load %"class.std::allocator.0"*, %"class.std::allocator.0"** %__a.addr, align 8
+  %1 = bitcast %"class.std::allocator.0"* %0 to %"class.__gnu_cxx::new_allocator.1"*
+  %2 = load i32*, i32** %__p.addr, align 8
+  %3 = load i64, i64* %__n.addr, align 8
+  call void @_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim(%"class.__gnu_cxx::new_allocator.1"* %1, i32* %2, i64 %3)
+  ret void
+}
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim(%"class.__gnu_cxx::new_allocator.1"* %this, i32* %__p, i64) #4 comdat align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE10deallocateEPim(%"class.__gnu_cxx::new_allocator.1"* %this, i32* %__p, i64) #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.__gnu_cxx::new_allocator.1"*, align 8
   %__p.addr = alloca i32*, align 8
@@ -624,7 +647,7 @@ entry:
 declare void @_ZdlPv(i8*) #6
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZNSaIiED2Ev(%"class.std::allocator.0"* %this) unnamed_addr #4 comdat align 2 {
+define linkonce_odr void @_ZNSaIiED2Ev(%"class.std::allocator.0"* %this) unnamed_addr #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.std::allocator.0"*, align 8
   store %"class.std::allocator.0"* %this, %"class.std::allocator.0"** %this.addr, align 8
@@ -635,7 +658,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx::new_allocator.1"* %this) unnamed_addr #4 comdat align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiED2Ev(%"class.__gnu_cxx::new_allocator.1"* %this) unnamed_addr #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.__gnu_cxx::new_allocator.1"*, align 8
   store %"class.__gnu_cxx::new_allocator.1"* %this, %"class.__gnu_cxx::new_allocator.1"** %this.addr, align 8
@@ -643,10 +666,10 @@ entry:
   ret void
 }
 
-declare i32 @_ZNKSs7compareEPKc(%"class.std::basic_string"*, i8*) #1
+declare i32 @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7compareEPKc(%"class.std::__cxx11::basic_string"*, i8*) #2
 
 ; Function Attrs: noinline optnone uwtable
-define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEDTcl12_S_constructfp_fp0_spclsr3stdE7forwardIT0_Efp1_EEERS0_PT_DpOS5_(%"class.std::allocator.0"* dereferenceable(1) %__a, i32* %__p, i32* dereferenceable(4) %__args) #0 comdat align 2 {
+define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_(%"class.std::allocator.0"* dereferenceable(1) %__a, i32* %__p, i32* dereferenceable(4) %__args) #0 comdat align 2 {
 entry:
   %__a.addr = alloca %"class.std::allocator.0"*, align 8
   %__p.addr = alloca i32*, align 8
@@ -655,10 +678,11 @@ entry:
   store i32* %__p, i32** %__p.addr, align 8
   store i32* %__args, i32** %__args.addr, align 8
   %0 = load %"class.std::allocator.0"*, %"class.std::allocator.0"** %__a.addr, align 8
-  %1 = load i32*, i32** %__p.addr, align 8
-  %2 = load i32*, i32** %__args.addr, align 8
-  %call = call dereferenceable(4) i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* dereferenceable(4) %2) #10
-  call void @_ZNSt16allocator_traitsISaIiEE12_S_constructIiJRKiEEENSt9enable_ifIXsr18__construct_helperIT_DpT0_EE5valueEvE4typeERS0_PS6_DpOS7_(%"class.std::allocator.0"* dereferenceable(1) %0, i32* %1, i32* dereferenceable(4) %call)
+  %1 = bitcast %"class.std::allocator.0"* %0 to %"class.__gnu_cxx::new_allocator.1"*
+  %2 = load i32*, i32** %__p.addr, align 8
+  %3 = load i32*, i32** %__args.addr, align 8
+  %call = call dereferenceable(4) i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* dereferenceable(4) %3) #10
+  call void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.1"* %1, i32* %2, i32* dereferenceable(4) %call)
   ret void
 }
 
@@ -691,7 +715,7 @@ entry:
   %add.ptr = getelementptr inbounds i32, i32* %5, i64 %call3
   %6 = load i32*, i32** %__args.addr, align 8
   %call4 = call dereferenceable(4) i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* dereferenceable(4) %6) #10
-  invoke void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEDTcl12_S_constructfp_fp0_spclsr3stdE7forwardIT0_Efp1_EEERS0_PT_DpOS5_(%"class.std::allocator.0"* dereferenceable(1) %4, i32* %add.ptr, i32* dereferenceable(4) %call4)
+  invoke void @_ZNSt16allocator_traitsISaIiEE9constructIiJRKiEEEvRS0_PT_DpOT0_(%"class.std::allocator.0"* dereferenceable(1) %4, i32* %add.ptr, i32* dereferenceable(4) %call4)
           to label %invoke.cont unwind label %lpad
 
 invoke.cont:                                      ; preds = %entry
@@ -848,35 +872,8 @@ unreachable:                                      ; preds = %invoke.cont17
   unreachable
 }
 
-; Function Attrs: noinline optnone uwtable
-define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE12_S_constructIiJRKiEEENSt9enable_ifIXsr18__construct_helperIT_DpT0_EE5valueEvE4typeERS0_PS6_DpOS7_(%"class.std::allocator.0"* dereferenceable(1) %__a, i32* %__p, i32* dereferenceable(4) %__args) #0 comdat align 2 {
-entry:
-  %__a.addr = alloca %"class.std::allocator.0"*, align 8
-  %__p.addr = alloca i32*, align 8
-  %__args.addr = alloca i32*, align 8
-  store %"class.std::allocator.0"* %__a, %"class.std::allocator.0"** %__a.addr, align 8
-  store i32* %__p, i32** %__p.addr, align 8
-  store i32* %__args, i32** %__args.addr, align 8
-  %0 = load %"class.std::allocator.0"*, %"class.std::allocator.0"** %__a.addr, align 8
-  %1 = bitcast %"class.std::allocator.0"* %0 to %"class.__gnu_cxx::new_allocator.1"*
-  %2 = load i32*, i32** %__p.addr, align 8
-  %3 = load i32*, i32** %__args.addr, align 8
-  %call = call dereferenceable(4) i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* dereferenceable(4) %3) #10
-  call void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.1"* %1, i32* %2, i32* dereferenceable(4) %call)
-  ret void
-}
-
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr dereferenceable(4) i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* dereferenceable(4) %__t) #4 comdat {
-entry:
-  %__t.addr = alloca i32*, align 8
-  store i32* %__t, i32** %__t.addr, align 8
-  %0 = load i32*, i32** %__t.addr, align 8
-  ret i32* %0
-}
-
-; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.1"* %this, i32* %__p, i32* dereferenceable(4) %__args) #4 comdat align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE9constructIiJRKiEEEvPT_DpOT0_(%"class.__gnu_cxx::new_allocator.1"* %this, i32* %__p, i32* dereferenceable(4) %__args) #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.__gnu_cxx::new_allocator.1"*, align 8
   %__p.addr = alloca i32*, align 8
@@ -893,6 +890,15 @@ entry:
   %4 = load i32, i32* %call, align 4
   store i32 %4, i32* %2, align 4
   ret void
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define linkonce_odr dereferenceable(4) i32* @_ZSt7forwardIRKiEOT_RNSt16remove_referenceIS2_E4typeE(i32* dereferenceable(4) %__t) #1 comdat {
+entry:
+  %__t.addr = alloca i32*, align 8
+  store i32* %__t, i32** %__t.addr, align 8
+  %0 = load i32*, i32** %__t.addr, align 8
+  ret i32* %0
 }
 
 ; Function Attrs: noinline optnone uwtable
@@ -965,9 +971,9 @@ entry:
 
 cond.true:                                        ; preds = %entry
   %_M_impl = getelementptr inbounds %"struct.std::_Vector_base", %"struct.std::_Vector_base"* %this1, i32 0, i32 0
-  %1 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl to %"class.__gnu_cxx::new_allocator.1"*
+  %1 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl to %"class.std::allocator.0"*
   %2 = load i64, i64* %__n.addr, align 8
-  %call = call i32* @_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv(%"class.__gnu_cxx::new_allocator.1"* %1, i64 %2, i8* null)
+  %call = call i32* @_ZNSt16allocator_traitsISaIiEE8allocateERS0_m(%"class.std::allocator.0"* dereferenceable(1) %1, i64 %2)
   br label %cond.end
 
 cond.false:                                       ; preds = %entry
@@ -979,7 +985,7 @@ cond.end:                                         ; preds = %cond.false, %cond.t
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %this) #4 comdat align 2 {
+define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE4sizeEv(%"class.std::vector"* %this) #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.std::vector"*, align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %this.addr, align 8
@@ -1038,8 +1044,9 @@ entry:
   store %"class.std::allocator.0"* %__a, %"class.std::allocator.0"** %__a.addr, align 8
   store i32* %__p, i32** %__p.addr, align 8
   %0 = load %"class.std::allocator.0"*, %"class.std::allocator.0"** %__a.addr, align 8
-  %1 = load i32*, i32** %__p.addr, align 8
-  call void @_ZNSt16allocator_traitsISaIiEE10_S_destroyIiEENSt9enable_ifIXsr16__destroy_helperIT_EE5valueEvE4typeERS0_PS4_(%"class.std::allocator.0"* dereferenceable(1) %0, i32* %1)
+  %1 = bitcast %"class.std::allocator.0"* %0 to %"class.__gnu_cxx::new_allocator.1"*
+  %2 = load i32*, i32** %__p.addr, align 8
+  call void @_ZN9__gnu_cxx13new_allocatorIiE7destroyIiEEvPT_(%"class.__gnu_cxx::new_allocator.1"* %1, i32* %2)
   ret void
 }
 
@@ -1048,32 +1055,22 @@ declare void @__cxa_rethrow()
 declare void @__cxa_end_catch()
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %this) #4 comdat align 2 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
+define linkonce_odr i64 @_ZNKSt6vectorIiSaIiEE8max_sizeEv(%"class.std::vector"* %this) #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.std::vector"*, align 8
   store %"class.std::vector"* %this, %"class.std::vector"** %this.addr, align 8
   %this1 = load %"class.std::vector"*, %"class.std::vector"** %this.addr, align 8
   %0 = bitcast %"class.std::vector"* %this1 to %"struct.std::_Vector_base"*
   %call = call dereferenceable(1) %"class.std::allocator.0"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %0) #10
-  %call2 = invoke i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator.0"* dereferenceable(1) %call)
-          to label %invoke.cont unwind label %terminate.lpad
-
-invoke.cont:                                      ; preds = %entry
+  %call2 = call i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator.0"* dereferenceable(1) %call) #10
   ret i64 %call2
-
-terminate.lpad:                                   ; preds = %entry
-  %1 = landingpad { i8*, i32 }
-          catch i8* null
-  %2 = extractvalue { i8*, i32 } %1, 0
-  call void @__clang_call_terminate(i8* %2) #12
-  unreachable
 }
 
 ; Function Attrs: noreturn
 declare void @_ZSt20__throw_length_errorPKc(i8*) #7
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr dereferenceable(8) i64* @_ZSt3maxImERKT_S2_S2_(i64* dereferenceable(8) %__a, i64* dereferenceable(8) %__b) #4 comdat {
+define linkonce_odr dereferenceable(8) i64* @_ZSt3maxImERKT_S2_S2_(i64* dereferenceable(8) %__a, i64* dereferenceable(8) %__b) #1 comdat {
 entry:
   %retval = alloca i64*, align 8
   %__a.addr = alloca i64*, align 8
@@ -1102,29 +1099,8 @@ return:                                           ; preds = %if.end, %if.then
   ret i64* %6
 }
 
-; Function Attrs: noinline optnone uwtable
-define linkonce_odr i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator.0"* dereferenceable(1) %__a) #0 comdat align 2 {
-entry:
-  %__a.addr = alloca %"class.std::allocator.0"*, align 8
-  store %"class.std::allocator.0"* %__a, %"class.std::allocator.0"** %__a.addr, align 8
-  %0 = load %"class.std::allocator.0"*, %"class.std::allocator.0"** %__a.addr, align 8
-  %call = call i64 @_ZNSt16allocator_traitsISaIiEE11_S_max_sizeIKS0_EENSt9enable_ifIXsr16__maxsize_helperIT_EE5valueEmE4typeERS5_(%"class.std::allocator.0"* dereferenceable(1) %0)
-  ret i64 %call
-}
-
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr dereferenceable(1) %"class.std::allocator.0"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %this) #4 comdat align 2 {
-entry:
-  %this.addr = alloca %"struct.std::_Vector_base"*, align 8
-  store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %this.addr, align 8
-  %this1 = load %"struct.std::_Vector_base"*, %"struct.std::_Vector_base"** %this.addr, align 8
-  %_M_impl = getelementptr inbounds %"struct.std::_Vector_base", %"struct.std::_Vector_base"* %this1, i32 0, i32 0
-  %0 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl to %"class.std::allocator.0"*
-  ret %"class.std::allocator.0"* %0
-}
-
-; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr i64 @_ZNSt16allocator_traitsISaIiEE11_S_max_sizeIKS0_EENSt9enable_ifIXsr16__maxsize_helperIT_EE5valueEmE4typeERS5_(%"class.std::allocator.0"* dereferenceable(1) %__a) #4 comdat align 2 {
+define linkonce_odr i64 @_ZNSt16allocator_traitsISaIiEE8max_sizeERKS0_(%"class.std::allocator.0"* dereferenceable(1) %__a) #1 comdat align 2 {
 entry:
   %__a.addr = alloca %"class.std::allocator.0"*, align 8
   store %"class.std::allocator.0"* %__a, %"class.std::allocator.0"** %__a.addr, align 8
@@ -1135,12 +1111,37 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.1"* %this) #4 comdat align 2 {
+define linkonce_odr dereferenceable(1) %"class.std::allocator.0"* @_ZNKSt12_Vector_baseIiSaIiEE19_M_get_Tp_allocatorEv(%"struct.std::_Vector_base"* %this) #1 comdat align 2 {
+entry:
+  %this.addr = alloca %"struct.std::_Vector_base"*, align 8
+  store %"struct.std::_Vector_base"* %this, %"struct.std::_Vector_base"** %this.addr, align 8
+  %this1 = load %"struct.std::_Vector_base"*, %"struct.std::_Vector_base"** %this.addr, align 8
+  %_M_impl = getelementptr inbounds %"struct.std::_Vector_base", %"struct.std::_Vector_base"* %this1, i32 0, i32 0
+  %0 = bitcast %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl"* %_M_impl to %"class.std::allocator.0"*
+  ret %"class.std::allocator.0"* %0
+}
+
+; Function Attrs: noinline nounwind optnone uwtable
+define linkonce_odr i64 @_ZNK9__gnu_cxx13new_allocatorIiE8max_sizeEv(%"class.__gnu_cxx::new_allocator.1"* %this) #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.__gnu_cxx::new_allocator.1"*, align 8
   store %"class.__gnu_cxx::new_allocator.1"* %this, %"class.__gnu_cxx::new_allocator.1"** %this.addr, align 8
   %this1 = load %"class.__gnu_cxx::new_allocator.1"*, %"class.__gnu_cxx::new_allocator.1"** %this.addr, align 8
   ret i64 4611686018427387903
+}
+
+; Function Attrs: noinline optnone uwtable
+define linkonce_odr i32* @_ZNSt16allocator_traitsISaIiEE8allocateERS0_m(%"class.std::allocator.0"* dereferenceable(1) %__a, i64 %__n) #0 comdat align 2 {
+entry:
+  %__a.addr = alloca %"class.std::allocator.0"*, align 8
+  %__n.addr = alloca i64, align 8
+  store %"class.std::allocator.0"* %__a, %"class.std::allocator.0"** %__a.addr, align 8
+  store i64 %__n, i64* %__n.addr, align 8
+  %0 = load %"class.std::allocator.0"*, %"class.std::allocator.0"** %__a.addr, align 8
+  %1 = bitcast %"class.std::allocator.0"* %0 to %"class.__gnu_cxx::new_allocator.1"*
+  %2 = load i64, i64* %__n.addr, align 8
+  %call = call i32* @_ZN9__gnu_cxx13new_allocatorIiE8allocateEmPKv(%"class.__gnu_cxx::new_allocator.1"* %1, i64 %2, i8* null)
+  ret i32* %call
 }
 
 ; Function Attrs: noinline optnone uwtable
@@ -1225,6 +1226,7 @@ entry:
   %__first = alloca %"class.std::move_iterator", align 8
   %__last = alloca %"class.std::move_iterator", align 8
   %__result.addr = alloca i32*, align 8
+  %__assignable = alloca i8, align 1
   %agg.tmp = alloca %"class.std::move_iterator", align 8
   %agg.tmp2 = alloca %"class.std::move_iterator", align 8
   %coerce.dive = getelementptr inbounds %"class.std::move_iterator", %"class.std::move_iterator"* %__first, i32 0, i32 0
@@ -1232,6 +1234,7 @@ entry:
   %coerce.dive1 = getelementptr inbounds %"class.std::move_iterator", %"class.std::move_iterator"* %__last, i32 0, i32 0
   store i32* %__last.coerce, i32** %coerce.dive1, align 8
   store i32* %__result, i32** %__result.addr, align 8
+  store i8 1, i8* %__assignable, align 1
   %0 = bitcast %"class.std::move_iterator"* %agg.tmp to i8*
   %1 = bitcast %"class.std::move_iterator"* %__first to i8*
   call void @llvm.memcpy.p0i8.p0i8.i64(i8* %0, i8* %1, i64 8, i32 8, i1 false)
@@ -1372,7 +1375,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr i32* @_ZNSt11__copy_moveILb1ELb1ESt26random_access_iterator_tagE8__copy_mIiEEPT_PKS3_S6_S4_(i32* %__first, i32* %__last, i32* %__result) #4 comdat align 2 {
+define linkonce_odr i32* @_ZNSt11__copy_moveILb1ELb1ESt26random_access_iterator_tagE8__copy_mIiEEPT_PKS3_S6_S4_(i32* %__first, i32* %__last, i32* %__result) #1 comdat align 2 {
 entry:
   %__first.addr = alloca i32*, align 8
   %__last.addr = alloca i32*, align 8
@@ -1413,7 +1416,7 @@ if.end:                                           ; preds = %if.then, %entry
 declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #9
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr i32* @_ZNSt10_Iter_baseIPiLb0EE7_S_baseES0_(i32* %__it) #4 comdat align 2 {
+define linkonce_odr i32* @_ZNSt10_Iter_baseIPiLb0EE7_S_baseES0_(i32* %__it) #1 comdat align 2 {
 entry:
   %__it.addr = alloca i32*, align 8
   store i32* %__it, i32** %__it.addr, align 8
@@ -1432,7 +1435,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr i32* @_ZNKSt13move_iteratorIPiE4baseEv(%"class.std::move_iterator"* %this) #4 comdat align 2 {
+define linkonce_odr i32* @_ZNKSt13move_iteratorIPiE4baseEv(%"class.std::move_iterator"* %this) #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.std::move_iterator"*, align 8
   store %"class.std::move_iterator"* %this, %"class.std::move_iterator"** %this.addr, align 8
@@ -1443,7 +1446,7 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZNSt13move_iteratorIPiEC2ES0_(%"class.std::move_iterator"* %this, i32* %__i) unnamed_addr #4 comdat align 2 {
+define linkonce_odr void @_ZNSt13move_iteratorIPiEC2ES0_(%"class.std::move_iterator"* %this, i32* %__i) unnamed_addr #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.std::move_iterator"*, align 8
   %__i.addr = alloca i32*, align 8
@@ -1456,22 +1459,8 @@ entry:
   ret void
 }
 
-; Function Attrs: noinline optnone uwtable
-define linkonce_odr void @_ZNSt16allocator_traitsISaIiEE10_S_destroyIiEENSt9enable_ifIXsr16__destroy_helperIT_EE5valueEvE4typeERS0_PS4_(%"class.std::allocator.0"* dereferenceable(1) %__a, i32* %__p) #0 comdat align 2 {
-entry:
-  %__a.addr = alloca %"class.std::allocator.0"*, align 8
-  %__p.addr = alloca i32*, align 8
-  store %"class.std::allocator.0"* %__a, %"class.std::allocator.0"** %__a.addr, align 8
-  store i32* %__p, i32** %__p.addr, align 8
-  %0 = load %"class.std::allocator.0"*, %"class.std::allocator.0"** %__a.addr, align 8
-  %1 = bitcast %"class.std::allocator.0"* %0 to %"class.__gnu_cxx::new_allocator.1"*
-  %2 = load i32*, i32** %__p.addr, align 8
-  call void @_ZN9__gnu_cxx13new_allocatorIiE7destroyIiEEvPT_(%"class.__gnu_cxx::new_allocator.1"* %1, i32* %2)
-  ret void
-}
-
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE7destroyIiEEvPT_(%"class.__gnu_cxx::new_allocator.1"* %this, i32* %__p) #4 comdat align 2 {
+define linkonce_odr void @_ZN9__gnu_cxx13new_allocatorIiE7destroyIiEEvPT_(%"class.__gnu_cxx::new_allocator.1"* %this, i32* %__p) #1 comdat align 2 {
 entry:
   %this.addr = alloca %"class.__gnu_cxx::new_allocator.1"*, align 8
   %__p.addr = alloca i32*, align 8
@@ -1482,10 +1471,10 @@ entry:
 }
 
 attributes #0 = { noinline optnone uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #2 = { nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #3 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #4 = { noinline nounwind optnone uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { noinline nounwind optnone uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #5 = { noinline noreturn nounwind }
 attributes #6 = { nobuiltin nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
 attributes #7 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
@@ -1500,4 +1489,4 @@ attributes #13 = { noreturn }
 !llvm.ident = !{!1}
 
 !0 = !{i32 1, !"wchar_size", i32 4}
-!1 = !{!"clang version 6.0.0 (trunk 321123)"}
+!1 = !{!"clang version 6.0.0 (tags/RELEASE_600/final)"}

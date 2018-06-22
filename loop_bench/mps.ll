@@ -63,4 +63,4 @@ attributes #0 = { noinline nounwind optnone uwtable "correctly-rounded-divide-sq
 !llvm.ident = !{!1}
 
 !0 = !{i32 1, !"wchar_size", i32 4}
-!1 = !{!"clang version 6.0.0 (trunk 321123)"}
+!1 = !{!"clang version 6.0.0 (tags/RELEASE_600/final)"}
