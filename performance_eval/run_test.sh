@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [ -d "datasets" ]; then
+rm -rf datasets
+fi
+
+mkdir datasets
+cd datasets
+wget 
+
 if [ -d "build" ]; then
 rm -rf build
 fi
