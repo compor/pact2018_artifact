@@ -10,5 +10,5 @@ type_repo.txt
 *.png
 *.frel
 *.ll
-Makefile
+CodeGen/Makefile
 
