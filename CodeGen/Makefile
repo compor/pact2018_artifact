@@ -1,6 +1,6 @@
-LLVM_SRC_PATH := /home/jiangpen/llvm/llvm/
+LLVM_SRC_PATH := /home/pact2018/llvm-6.0.0.src
 
-LLVM_BUILD_PATH := /home/jiangpen/llvm/install
+LLVM_BUILD_PATH := /usr/local/llvm_install
 LLVM_BIN_PATH   := $(LLVM_BUILD_PATH)/bin
 
 
