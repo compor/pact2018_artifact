@@ -10,4 +10,5 @@ type_repo.txt
 *.png
 *.frel
 *.ll
+Makefile
 

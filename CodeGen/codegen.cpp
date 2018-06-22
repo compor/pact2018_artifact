@@ -661,16 +661,9 @@ int main(int argc, const char **argv) {
         graph[from_idx].push_back(edge);
     }
 
-   /* for (auto &gg: graph) {
-      cout << gg.first << " ";
-      for (auto &ggg: gg.second) {
-      cout << ggg.dest_id << " " << ggg.type << " " << ggg.coefficient << " " << ggg.origin << endl;
-
-      }
-      }*/
-
 
     GenerateSamples(graph, &sample_results);
+
 
     //  print_results(sample_results);
 
