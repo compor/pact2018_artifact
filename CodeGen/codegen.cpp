@@ -61,8 +61,8 @@ public:
         if (num == MY_SMALL) return "MY_SMALL";
         if (num == MY_LARGE) return "MY_LARGE";
         if (num == MY_HUGE) return "MY_HUGE";
-        if (num == 1) return "true";
-        if (num == 0) return "false";
+        if (num == 1) return "1";
+        if (num == 0) return "0";
         return "";
     }
 
@@ -143,12 +143,19 @@ public:
                 decl += name2type[ss.first] + " S_V" + ss.first + "[_N_THREADS][_N_SAMP];\n";
             }
 
+            decl += "\n";
+
             decl += "int BSIZE = N / _N_THREADS;\n";
             decl += "thread *workers = new thread[_N_THREADS];\n";
 
-            decl += "for (int tid = 0; tid < _N_THREADS; tid++) {\n";
+            decl += "for (int tid = 0; tid < _N_THREADS; tid++) {\n\n";
 
-            decl += "workers[tid] = thread([=] {\n";
+            decl += "workers[tid] = thread([=";
+            for (auto &ss : recur_names) {
+                decl += ", &S_V" + ss.first;
+            }
+
+			decl += "] {\n\n";
 
             for (auto &ss : recur_names) {
                 decl += name2type[ss.first] + " V" + ss.first + "[_N_THREADS] = {";
@@ -190,7 +197,8 @@ public:
         }
 
         if (const ForStmt *FS = Result.Nodes.getNodeAs<clang::ForStmt>("forLoop")) {
-            string innerfor = "{ \n for (int _i_s=0; _i_s< _N_SAMP;  _i_s++) \n";
+            string innerfor;
+            innerfor = "{ \n for (int _i_s=0; _i_s< _N_SAMP;  _i_s++) \n";
 
 
             const Stmt* tt;
@@ -228,7 +236,7 @@ public:
 
             mcopy += original_decls;
 
-            mcopy += "for (tid=0; tid<_N_THREADS; tid++) {\n";
+            mcopy += "for (int tid=0; tid<_N_THREADS; tid++) {\n";
             mcopy += "workers[tid].join();\n";
 
             map<string, string> last_update;
@@ -237,15 +245,15 @@ public:
                 const string &rv_name = rv.first;
                 int rv_idx = rv.second;
 
-              //  cout << "rv_name: " << rv_name << endl;
-		//		cout << "rv_idx: " << rv_idx << endl;
+                //  cout << "rv_name: " << rv_name << endl;
+                //		cout << "rv_idx: " << rv_idx << endl;
 
-				// sampling points for rv
+                // sampling points for rv
                 auto &samples = sample_results[rv_idx];
 
                 if (!samples.empty()) {
 
-                    // get all variables that rv dependents on 
+                    // get all variables that rv dependents on
                     vector<int> all_incoming_nodes;
                     for (unsigned ts = 0; ts < samples[0].size(); ts++) {
                         all_incoming_nodes.push_back(samples[0][ts].vertex_id);
@@ -255,7 +263,7 @@ public:
                     int incoming_node = all_incoming_nodes[0];
                     string incoming_rvname = getNamebyIdx(incoming_node);
                     EdgeInfo edge = getEdge(incoming_node, rv_idx);
-		//			cout << "edge: " << incoming_node << " " << rv_idx << " " << edge.dest_id << " " << edge.type << endl;
+                    //			cout << "edge: " << incoming_node << " " << rv_idx << " " << edge.dest_id << " " << edge.type << endl;
 
                     vector<map<int, int>> groups;
                     for (unsigned i = 0; i < merged_samples.size(); i++) {
@@ -264,17 +272,17 @@ public:
                         int svalue = merged_samples[i][incoming_node].sample_value;
                         if (svalue == PADDING_VALUE) continue;
 
-          //              cout << "svalue: " << svalue << endl;
-			//			cout << "all incoming nodes: ";
-			//			for (auto &tn: all_incoming_nodes) cout << tn << " ";
-			//			cout << endl;
+                        //              cout << "svalue: " << svalue << endl;
+                        //			cout << "all incoming nodes: ";
+                        //			for (auto &tn: all_incoming_nodes) cout << tn << " ";
+                        //			cout << endl;
 
                         bool inserted = false;
                         for (auto &g : groups) {
                             if (g.find(svalue) == g.end() && isConsistent(g.begin()->second, i, all_incoming_nodes, incoming_node)) {
                                 g[svalue] = i;
                                 inserted = true;
-								break;
+                                break;
                             }
                         }
                         if (!inserted) {
@@ -282,28 +290,28 @@ public:
                             g[svalue] = i;
                             groups.push_back(g);
                         }
-						/*
-						cout << "groups: " << endl;
-						for (auto &g: groups) {
-							for (auto &gg: g) {
-								cout << gg.first << " " << gg.second << endl;
-							}		
-							cout << endl;
-						}*/
+                        /*
+                        cout << "groups: " << endl;
+                        for (auto &g: groups) {
+                        	for (auto &gg: g) {
+                        		cout << gg.first << " " << gg.second << endl;
+                        	}
+                        	cout << endl;
+                        }*/
                     }
 
-					// if a variable has only one incoming node, we only need to keep one sample group
-					if (all_incoming_nodes.size() == 1) {
-						for (unsigned ii=0; ii<groups.size()-1; ii++) {
-							groups.pop_back();
-						}
-					}
+                    // if a variable has only one incoming node, we only need to keep one sample group
+                    if (all_incoming_nodes.size() == 1) {
+                        for (unsigned ii = 0; ii < groups.size() - 1; ii++) {
+                            groups.pop_back();
+                        }
+                    }
 
 
                     //cout << "edge type: " << edge.type << endl;
                     //cout << "num samples: " << merged_samples.size() << endl;
 
-              //      cout << "num groups: " << groups.size() << endl;
+                    //      cout << "num groups: " << groups.size() << endl;
 
 
                     int tmp_idx = 0;
@@ -311,15 +319,23 @@ public:
 
                         last_update[rv_name] = rv_name + incoming_rvname + to_string(tmp_idx);
 
-				//		cout << edge.type << endl;
+                        //		cout << edge.type << endl;
 
                         if ((edge.type.find("LINR_P") != string::npos && edge.coefficient) || (edge.type.find("LINR_N") != string::npos && edge.coefficient)) {
-                            assert(sample_rows.find(MY_LARGE) != sample_rows.end());
-                            mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - MY_LARGE;\n";
+                            //assert(sample_rows.find(MY_LARGE) != sample_rows.end());
+                            if (sample_rows.find(MY_SMALL) != sample_rows.end()) {
+                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - MY_SMALL;\n";
+                            } else if (sample_rows.find(0) != sample_rows.end()) {
+                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "];\n";
+                            }
 
                         } else if (edge.type.find("LINR_") != string::npos) {
                             assert(sample_rows.size() == 2);
-                            mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr(S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], MY_SMALL, MY_LARGE, " + incoming_rvname + ");\n";
+                            if (sample_rows.find(MY_SMALL) != sample_rows.end()) {
+                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr(S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], MY_SMALL, MY_LARGE, " + incoming_rvname + ");\n";
+                            } else if (sample_rows.find(0) != sample_rows.end()) {
+                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr_01(S_V" + rv_name + "[tid][" + to_string(sample_rows[0]) + "], S_V" + rv_name + "[tid][" + to_string(sample_rows[1]) + "], " + incoming_rvname + ");\n";
+                            }
                         } else if (edge.type.find("RECT_") != string::npos) {
 
                             if (edge.type.find(',') == string::npos) {
@@ -430,7 +446,7 @@ public:
                                 if (g.find(svalue) == g.end() && isConsistent(g.begin()->second, i, all_incoming_nodes, ts, reduced_samples)) {
                                     g[svalue] = i;
                                     inserted = true;
-									break;
+                                    break;
                                 }
                             }
                             if (!inserted) {
@@ -451,12 +467,20 @@ public:
 
 
                             if ((edge.type.find("LINR_P") != string::npos && edge.coefficient) || (edge.type.find("LINR_N") != string::npos && edge.coefficient)) {
-                                assert(sample_rows.size() == 1 && sample_rows.find(MY_LARGE) != sample_rows.end());
-                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + " + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + " - MY_LARGE;\n";
+                                //    assert(sample_rows.size() == 1 && sample_rows.find(MY_LARGE) != sample_rows.end());
+                                if (sample_rows.find(MY_SMALL) != sample_rows.end()) {
+                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - MY_SMALL;\n";
+                                } else if (sample_rows.find(0) != sample_rows.end()) {
+                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "];\n";
+                                }
 
                             } else if (edge.type.find("LINR_") != string::npos) {
                                 assert(sample_rows.size() == 2);
-                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr(" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + ", " + rv_name + previous_rv  + to_string(sample_rows[MY_LARGE]) + ", MY_SMALL, MY_LARGE, " + incoming_rvname + ");\n";
+                                if (sample_rows.find(MY_SMALL) != sample_rows.end()) {
+                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr(S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], MY_SMALL, MY_LARGE, " + incoming_rvname + ");\n";
+                                } else if (sample_rows.find(0) != sample_rows.end()) {
+                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr_01(S_V" + rv_name + "[tid][" + to_string(sample_rows[0]) + "], S_V" + rv_name + "[tid][" + to_string(sample_rows[1]) + "], " + incoming_rvname + ");\n";
+                                }
                             } else if (edge.type.find("RECT_") != string::npos) {
 
                                 if (edge.type.find(',') == string::npos) {

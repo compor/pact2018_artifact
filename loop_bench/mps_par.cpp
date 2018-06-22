@@ -1,14 +1,24 @@
+#include "interpolate.h"
+#include <cstring>
+#include <thread>
+using namespace std;
+#ifndef _N_THREADS
+#define _N_THREADS 8
+#endif
+
 void parallel(int *A, int N) {
   /* Part One: Parallel Sampling  */
   const int _N_SAMP = 2;
   int S_Vm[_N_THREADS][_N_SAMP];
   int S_Vs[_N_THREADS][_N_SAMP];
+
   int BSIZE = N / _N_THREADS;
   thread *workers = new thread[_N_THREADS];
   for (int tid = 0; tid < _N_THREADS; tid++) {
-    workers[tid] = thread([=] {
-      int Vm[_N_THREADS] = {MY_SMALL, MY_SMALL};
-      int Vs[_N_THREADS] = {MY_SMALL, MY_LARGE};
+
+    workers[tid] = thread([=, &S_Vm, &S_Vs] {
+      int Vm[_N_THREADS] = {0, 0};
+      int Vs[_N_THREADS] = {0, 1};
       int start_pos = tid * BSIZE;
       int end_pos = min(tid * BSIZE, N);
 
@@ -28,11 +38,11 @@ void parallel(int *A, int N) {
   /* Part Two: Sequential Propagation */
   int s = 0;
   int m = -99999;
-  for (tid = 0; tid < _N_THREADS; tid++) {
+  for (int tid = 0; tid < _N_THREADS; tid++) {
     workers[tid].join();
-    int ms0 = Rectf_max(S_Vm[tid][0], (s + S_Vm[tid][1] - 1.000000 * MY_LARGE));
+    int ms0 = Rectf_max(S_Vm[tid][0], (s + S_Vm[tid][0] - 1.000000 * MY_LARGE));
     int mm0 = Rectf_max(ms0, (1.000000 * m));
-    int ss0 = 1.000000 * s + S_Vs[tid][1] - MY_LARGE;
+    int ss0 = 1.000000 * s + S_Vs[tid][0];
     m = mm0;
     s = ss0;
   } // end propagation
