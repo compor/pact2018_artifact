@@ -8,14 +8,16 @@ void parallel(int nlines, string *A) {
   const int _N_SAMP = 4;
   int S_Vcount[_N_THREADS][_N_SAMP];
   int S_Vpushed[_N_THREADS][_N_SAMP];
+
   int BSIZE = N / _N_THREADS;
   thread *workers = new thread[_N_THREADS];
   for (int tid = 0; tid < _N_THREADS; tid++) {
-    workers[tid] = thread([=] {
-      int Vcount[_N_THREADS] = {MY_SMALL, MY_LARGE, MY_SMALL, MY_LARGE};
-      int Vpushed[_N_THREADS] = {false, false, true, true};
-      int start_pos = tid * BSIZE;
-      int end_pos = min(tid * BSIZE, N);
+
+    workers[tid] = thread([=, &S_Vcount, &S_Vpushed] {
+      int Vcount[_N_SAMP] = {0, 1, 0, 1};
+      int Vpushed[_N_SAMP] = {0, 0, 1, 1};
+      int start_pos = max(0, tid * BSIZE);
+      int end_pos = min(tid * BSIZE + BSIZE, N);
       vector<int> res;
 
       for (int i = start_pos; i < end_pos; i++) {
@@ -44,7 +46,7 @@ void parallel(int nlines, string *A) {
   /* Part Two: Sequential Propagation */
   int pushed = 0;
   int count = 0;
-  for (tid = 0; tid < _N_THREADS; tid++) {
+  for (int tid = 0; tid < _N_THREADS; tid++) {
     workers[tid].join();
     int countpushed0;
     if (pushed == 0) {
@@ -58,8 +60,7 @@ void parallel(int nlines, string *A) {
     } else {
       countpushed1 = S_Vcount[tid][3];
     }
-    int countcount0 =
-        Linr(countpushed0, countpushed1, MY_SMALL, MY_LARGE, count);
+    int countcount0 = Linr_01(countpushed0, countpushed1, count);
     int pushedpushed0;
     if (pushed == 0) {
       pushedpushed0 = S_Vpushed[tid][0];

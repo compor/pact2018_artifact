@@ -6,7 +6,7 @@ void serial(int N, int *A) {
       s += A[i];
     } else {
       s = 0;
-      p = i + 1;
+	  p = i + 1;
     }
   }
 }

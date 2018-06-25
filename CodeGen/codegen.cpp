@@ -155,10 +155,10 @@ public:
                 decl += ", &S_V" + ss.first;
             }
 
-			decl += "] {\n\n";
+            decl += "] {\n\n";
 
             for (auto &ss : recur_names) {
-                decl += name2type[ss.first] + " V" + ss.first + "[_N_THREADS] = {";
+                decl += name2type[ss.first] + " V" + ss.first + "[_N_SAMP] = {";
 
                 bool first = true;
                 bool found = false;
@@ -186,8 +186,20 @@ public:
                 decl += "}; \n";
             }
 
-            decl += "int start_pos = tid * BSIZE;\n";
-            decl += "int end_pos = min(tid * BSIZE, N);\n";
+			string init_val = "";
+            if (const ForStmt *FS = Result.Nodes.getNodeAs<clang::ForStmt>("forLoop")) {
+
+                const Stmt* tt;
+                for ( auto *v : FS->getInit()->children()) {
+                    tt = v;
+                }
+
+				init_val = Rewrite.getRewrittenText(SourceRange(tt->getLocStart(), tt->getLocEnd()));
+            }
+
+
+            decl += string("int start_pos = ") + "max(" + init_val + ", tid * BSIZE);\n";
+            decl += "int end_pos = min(tid * BSIZE + BSIZE, N);\n";
 
 
 
@@ -272,10 +284,10 @@ public:
                         int svalue = merged_samples[i][incoming_node].sample_value;
                         if (svalue == PADDING_VALUE) continue;
 
-                        //              cout << "svalue: " << svalue << endl;
-                        //			cout << "all incoming nodes: ";
-                        //			for (auto &tn: all_incoming_nodes) cout << tn << " ";
-                        //			cout << endl;
+                        //        cout << "svalue: " << svalue << endl;
+                        //		cout << "all incoming nodes: ";
+                        //		for (auto &tn: all_incoming_nodes) cout << tn << " ";
+                        //		cout << endl;
 
                         bool inserted = false;
                         for (auto &g : groups) {
@@ -290,14 +302,14 @@ public:
                             g[svalue] = i;
                             groups.push_back(g);
                         }
-                        /*
-                        cout << "groups: " << endl;
-                        for (auto &g: groups) {
-                        	for (auto &gg: g) {
-                        		cout << gg.first << " " << gg.second << endl;
-                        	}
-                        	cout << endl;
-                        }*/
+
+                        /* cout << "groups: " << endl;
+                         for (auto &g: groups) {
+                         	for (auto &gg: g) {
+                         		cout << gg.first << " " << gg.second << endl;
+                         	}
+                         	cout << endl;
+                         }*/
                     }
 
                     // if a variable has only one incoming node, we only need to keep one sample group
@@ -324,9 +336,9 @@ public:
                         if ((edge.type.find("LINR_P") != string::npos && edge.coefficient) || (edge.type.find("LINR_N") != string::npos && edge.coefficient)) {
                             //assert(sample_rows.find(MY_LARGE) != sample_rows.end());
                             if (sample_rows.find(MY_SMALL) != sample_rows.end()) {
-                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - MY_SMALL;\n";
+                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "] - MY_SMALL;\n";
                             } else if (sample_rows.find(0) != sample_rows.end()) {
-                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "];\n";
+                                mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[1]) + "];\n";
                             }
 
                         } else if (edge.type.find("LINR_") != string::npos) {
@@ -365,28 +377,41 @@ public:
                                     }
                                 } else if (!edge.origin) {
                                     // known coef but not pass origin
-                                    if (edge.type == "RECT_A") {
+									if (*edge.coefficient != 0.0) {
+										if (edge.type == "RECT_A") {
+											mcopy +=  name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + incoming_rvname + " + " + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - " + to_string(*edge.coefficient) + " * MY_LARGE));\n";
 
-                                        mcopy +=  name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + incoming_rvname + " + " + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - " + to_string(*edge.coefficient) + " * MY_LARGE));\n";
+										} else if (edge.type == "RECT_B") {
 
-                                    } else if (edge.type == "RECT_B") {
+											mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + incoming_rvname + " + " + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - " + to_string(*edge.coefficient) + " * MY_LARGE));\n";
 
-                                        mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + incoming_rvname + " + " + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - " + to_string(*edge.coefficient) + " * MY_LARGE));\n";
+										} else if (edge.type == "RECT_C") {
+											mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], (" + incoming_rvname + " + " + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "] - " + to_string(*edge.coefficient) + " * MY_SMALL));\n";
 
-                                    } else if (edge.type == "RECT_C") {
-                                        mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], (" + incoming_rvname + " + " + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "] - " + to_string(*edge.coefficient) + " * MY_SMALL));\n";
+										} else if (edge.type == "RECT_D") {
+											mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], (" + incoming_rvname + " + " + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "] - " + to_string(*edge.coefficient) + " * MY_SMALL));\n";
 
-                                    } else if (edge.type == "RECT_D") {
-                                        mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], (" + incoming_rvname + " + " + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "] - " + to_string(*edge.coefficient) + " * MY_SMALL));\n";
+										} else {
+											cerr << "rect e or f, but do not know if it passes origin!" << endl;
+											exit(-1);
+										}
+									} else {
+										// when the coef is zero, it is a threshold function, which can be seen as a special case of rectfied linear function
+										if (edge.type == "RECT_A") {
+											mcopy +=  name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Thrld_max(" + "S_V" + incoming_rvname + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + incoming_rvname + " + " + "S_V" + incoming_rvname + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - MY_LARGE), " +  "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], "+ rv_name + ");\n";
 
-                                    } else {
-                                        cerr << "rect e or f, but do not know if it passes origin!" << endl;
-                                        exit(-1);
-                                    }
-                                    // known ceof, and passes origin
-                                } else if (edge.type == "RECT_A") {
-                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + to_string(*edge.coefficient) + " * " + incoming_rvname +     "));\n";
-                                } else if (edge.type == "RECT_B") {
+										} else {
+											cerr << "todo: other threshold types" << endl;
+											exit(-1);
+										}
+
+
+
+									}
+									// known ceof, and passes origin
+								} else if (edge.type == "RECT_A") {
+									mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + to_string(*edge.coefficient) + " * " + incoming_rvname +     "));\n";
+								} else if (edge.type == "RECT_B") {
                                     mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + to_string(*edge.coefficient) + " * " + incoming_rvname +     "));\n";
                                 } else if (edge.type == "RECT_C") {
                                     mcopy +=  name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], (" + to_string(*edge.coefficient) + " * " + incoming_rvname +     "));\n";
@@ -469,17 +494,19 @@ public:
                             if ((edge.type.find("LINR_P") != string::npos && edge.coefficient) || (edge.type.find("LINR_N") != string::npos && edge.coefficient)) {
                                 //    assert(sample_rows.size() == 1 && sample_rows.find(MY_LARGE) != sample_rows.end());
                                 if (sample_rows.find(MY_SMALL) != sample_rows.end()) {
-                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - MY_SMALL;\n";
+                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "+" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + "] - MY_SMALL;\n";
                                 } else if (sample_rows.find(0) != sample_rows.end()) {
-                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "  + S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "];\n";
+                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + to_string(*edge.coefficient)  + " * " + incoming_rvname + "+" + rv_name + previous_rv + to_string(sample_rows[0]) + "];\n";
                                 }
 
                             } else if (edge.type.find("LINR_") != string::npos) {
                                 assert(sample_rows.size() == 2);
                                 if (sample_rows.find(MY_SMALL) != sample_rows.end()) {
-                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr(S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_LARGE]) + "], MY_SMALL, MY_LARGE, " + incoming_rvname + ");\n";
+
+                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr(" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + ", " + rv_name + previous_rv  + to_string(sample_rows[MY_LARGE]) + ", MY_SMALL, MY_LARGE, " + incoming_rvname + ");\n";
                                 } else if (sample_rows.find(0) != sample_rows.end()) {
-                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr_01(S_V" + rv_name + "[tid][" + to_string(sample_rows[0]) + "], S_V" + rv_name + "[tid][" + to_string(sample_rows[1]) + "], " + incoming_rvname + ");\n";
+
+                                    mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Linr_01(" + rv_name + previous_rv + to_string(sample_rows[0]) + ", " + rv_name + previous_rv  + to_string(sample_rows[1]) + ", " + incoming_rvname + ");\n";
                                 }
                             } else if (edge.type.find("RECT_") != string::npos) {
 
@@ -491,6 +518,7 @@ public:
 
                                         } else {
                                             // passes origin, unkown coef
+                                            //cout << sample_rows.size() << endl;
                                             assert(sample_rows.size() == 2);
                                             if (edge.type == "RECT_A") {
                                                 mcopy +=  name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + ", (" + incoming_rvname + " * " + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + " / MY_LARGE));\n";
@@ -510,24 +538,38 @@ public:
                                         }
                                     } else if (!edge.origin) {
                                         // known coef but not pass origin
-                                        if (edge.type == "RECT_A") {
+										if (*edge.coefficient != 0.0) {
+											if (edge.type == "RECT_A") {
 
-                                            mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + ", (" + incoming_rvname + " + " + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + " - " + to_string(*edge.coefficient) + " * MY_LARGE));\n";
+												mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + ", (" + incoming_rvname + " + " + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + " - " + to_string(*edge.coefficient) + " * MY_LARGE));\n";
 
-                                        } else if (edge.type == "RECT_B") {
+											} else if (edge.type == "RECT_B") {
 
-                                            mcopy +=  name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + ", (" + incoming_rvname + " + " + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + " - " + to_string(*edge.coefficient) + " * MY_LARGE));\n";
+												mcopy +=  name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + ", (" + incoming_rvname + " + " + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + " - " + to_string(*edge.coefficient) + " * MY_LARGE));\n";
 
-                                        } else if (edge.type == "RECT_C") {
-                                            mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + ", (" + incoming_rvname + " + " + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + " - " + to_string(*edge.coefficient) + " * MY_SMALL));\n";
+											} else if (edge.type == "RECT_C") {
+												mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + ", (" + incoming_rvname + " + " + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + " - " + to_string(*edge.coefficient) + " * MY_SMALL));\n";
 
-                                        } else if (edge.type == "RECT_D") {
-                                            mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + ", (" + incoming_rvname + " + " + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + " - " + to_string(*edge.coefficient) + " * MY_SMALL));\n";
+											} else if (edge.type == "RECT_D") {
+												mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_min(" + rv_name + previous_rv + to_string(sample_rows[MY_LARGE]) + ", (" + incoming_rvname + " + " + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + " - " + to_string(*edge.coefficient) + " * MY_SMALL));\n";
 
-                                        } else {
-                                            cerr << "rect e or f, but do not know if it passes origin!" << endl;
-                                            exit(-1);
-                                        }
+											} else {
+												cerr << "rect e or f, but do not know if it passes origin!" << endl;
+												exit(-1);
+											}
+
+										} else {
+
+											// when the coef is zero, it is a threshold function, which can be seen as a special case of rectfied linear function
+											if (edge.type == "RECT_A") {
+												mcopy +=  name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Thrld_max(" + "S_V" + incoming_rvname + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], (" + incoming_rvname + " + " + "S_V" + incoming_rvname + "[tid][" + to_string(sample_rows[MY_LARGE]) + "] - MY_LARGE), " +  "S_V" + rv_name + "[tid][" + to_string(sample_rows[MY_SMALL]) + "], "+ rv_name + previous_rv + ");\n";
+
+											} else {
+												cerr << "todo: other threshold types" << endl;
+												exit(-1);
+											}
+
+									}
                                         // known ceof, and passes origin
                                     } else if (edge.type == "RECT_A") {
                                         mcopy += name2type[rv_name] + " " + rv_name + incoming_rvname + to_string(tmp_idx) + " = " + "Rectf_max(" + rv_name + previous_rv + to_string(sample_rows[MY_SMALL]) + ", (" + to_string(*edge.coefficient) + " * " + incoming_rvname +     "));\n";

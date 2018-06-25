@@ -15,7 +15,7 @@ os.system(command1)
 command2 = 'opt -load ../build/FuncTypePass/libFuncTypePass.so -ftype < ' + fn +'.ll -myoutput=' + fn + '.frel -o /dev/null'
 print command2
 os.system(command2) 
-command3 = "(echo '#include <thread>'; echo '#include <cstring>'; echo '#include \"interpolate.h\"'; echo 'using namespace std;'; echo '#ifndef _N_THREADS'; echo '#define _N_THREADS 8'; echo '#endif\n'; ../CodeGen/codegen " + filename + ' < ' + fn + '.frel -- 2> /dev/null) | clang-format > ' + fn + '_par.cpp' 
+command3 = "../CodeGen/codegen " + filename + ' < ' + fn + '.frel -- 2> /dev/null'  + ' | clang-format > ' + fn + '_par.cpp' 
 #command3 = '../CodeGen/codegen ' + filename + ' < ' + fn + '.frel -- '
 print command3
 os.system(command3)

@@ -5,10 +5,10 @@
 
 using namespace std;
 
-#define MY_TINY (INT_MIN>>11)
-#define MY_HUGE  (INT_MAX>>11)
-#define MY_SMALL (MY_TINY>>1)
-#define MY_LARGE (MY_HUGE>>1)
+#define MY_TINY (-99999999) 
+#define MY_HUGE  (999999999)
+#define MY_SMALL (-88888888)
+#define MY_LARGE (88888888)
 
 #define MMSIZE (1024*1024*4)
 
@@ -17,6 +17,7 @@ using namespace std;
 #define Rectf_max2(y1, x2, y2, x) Rectf_max(y1, (x+y2-x2))
 #define Rectf_min2(x1, y1, x2, y2, x) Rectf_min(y2, (x+y1-x1))
 #define Linr_01(y0, y1, x) ((y1-y0)*x + y0)
+#define Thrld_max(a, b, c, d) ((a)>(b)?(c):(d))
 
 
 template <class T>

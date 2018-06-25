@@ -139,12 +139,14 @@ void GenerateSamples(const map<int, vector<EdgeInfo>>& graph,
     for (auto& pair : graph) {
         bool only_linr = true;
         for (auto &st : pair.second) {
+	//		cout << st.type << endl;
             if (st.type.find("LINR_") == string::npos) {
                 only_linr = false;
                 break;
             }
         }
-        only_for_linr.push_back(pair.first);
+		if (only_linr)
+			only_for_linr.push_back(pair.first);
     }
 
     for (auto& v : only_for_linr) {
