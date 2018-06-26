@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     A[i] = 2.0 * (rand() / INT_MAX) - 1;
   }
   serial(ma, mi, m, A);
-  fout << "msp\t";
+  fout << "msp-our-vec1\t";
   for(int nth=1; nth<=64;nth*=2) {
     parallel(ma, mi, m, A, nth);
   }

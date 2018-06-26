@@ -235,19 +235,19 @@ int main(int argc, char *argv[])
         A[i] = rand();
     }
     serial(m, m2, A);
-    fout << "ss_parallel\t";
+    fout << "ss-our-nonvec\t";
     for(int nth=1; nth<=64;nth*=2) {
         parallel(m, m2, A, nth);
     }
     fout << endl;
 
-    fout1 << "ss_simd+mimd\t";
+    fout << "ss-our-vec2\t";
     for(int nth=1; nth<=64;nth*=2) {
         simd_mimd(m, m2, A, nth);
     }
-    fout1 << endl;
+    fout << endl;
 
-    fout << "ss_parsynt\t";
+    fout << "ss-parsynt\t";
     for(int nth=1; nth<=64;nth*=2) {
         parsynt(m, m2, A, nth);
     }

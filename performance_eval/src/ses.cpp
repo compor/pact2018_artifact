@@ -182,17 +182,17 @@ int main(int argc, char *argv[])
 
     cout << "real value: " << x[N/10*9] << endl;
     serial(alpha, x, s_seq);
-    fout << "ses_parallel\t";
+    fout << "ses-our-vec1\t";
     for(int nth=1; nth<=64;nth*=2) {
         parallel(alpha, x, s_par, nth);
     }
     fout << endl;
 
-    fout1 << "ses_simd+mimd\t";
+    fout << "ses-our-vec2\t";
     for(int nth=1; nth<=64;nth*=2) {
         simd_mimd(alpha, x, s_par, nth);
     }
-    fout1 << endl;
+    fout << endl;
 
     return 0;
 }

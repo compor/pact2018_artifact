@@ -6,7 +6,8 @@ fi
 
 mkdir datasets
 cd datasets
-wget 
+wget https://www.dropbox.com/s/fdakfnj8xoknzuc/type_repo.txt 
+cd ..
 
 if [ -d "build" ]; then
 rm -rf build
@@ -22,11 +23,10 @@ cmake ../src
 make
 
 printf "   \t1\t2\t4\t8\t16\t32\t64\n" >> speedups.txt
-printf "   \t1\t2\t4\t8\t16\t32\t64\n" >> fullspeedups.txt
 
 for obj in *.out; do
 echo "=============$obj================"
 ./$obj
 done
 
-mv *speedups.txt ../
+mv speedups.txt ../

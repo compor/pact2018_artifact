@@ -98,7 +98,7 @@ int main()
     if(rand() % 10000 == 0) A[i] += 1;
   }
   serial(A);
-  fout << "agg2\t";
+  fout << "agg2-our-vec1\t";
   for(int nth=1; nth<=64;nth*=2) {
     parallel(A, nth);
   }

@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
   for(int i=0; i<N; i++) {
     A[i] = rand() % 100 - 50;
   }
-  fout << "mts_parallel_non-vec\t";
+  fout << "mts-our-nonvec\t";
   serial(s, p, A);
   for(int nth=1;nth<=64;nth*=2) {
     parallel_nonvec(s, p, A, nth);
@@ -309,19 +309,19 @@ int main(int argc, char *argv[])
   fout << endl;
 
 
-  fout << "mts_parallel\t";
+  fout << "mts-our-vec1\t";
   serial(s, p, A);
   for(int nth=1;nth<=64;nth*=2) {
     parallel(s, p, A, nth);
   }
   fout << endl;
 
-    fout1 << "mts_simd+mimd\t";
+    fout << "mts-our-vec2\t";
   for(int nth=1;nth<=64;nth*=2) {
     simd_mimd(s, p, A, nth);
   }
-  fout1 << endl;
-  fout << "mts_parsynt\t";
+  fout << endl;
+  fout << "mts-parsynt\t";
   
   for(int nth=1; nth<=64;nth*=2) {
 

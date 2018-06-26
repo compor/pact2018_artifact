@@ -284,23 +284,23 @@ int main(int argc, char *argv[])
     }
 
     serial(s, m, A);
-   fout << "mss_parallel_nonvec\t";
+   fout << "mss-our-nonvec\t";
     for(int nth=1;nth<=64;nth*=2) {
         parallel_nonvec(s, m, A, nth);
     }
     fout << endl;
 
-    fout << "mss_parallel\t";
+    fout << "mss-our-vec1\t";
     for(int nth=1;nth<=64;nth*=2) {
         parallel(s, m, A, nth);
     }
     fout << endl;
-    fout1 << "mss_simd+mimd\t";
+    fout << "mss-our-vec2\t";
     for(int nth=1;nth<=64;nth*=2) {
         simd_mimd(s, m, A, nth);
     }
-    fout1 << endl;
-    fout << "mss_parsynt\t";
+    fout << endl;
+    fout << "mss-parsynt\t";
     for(int nth=1;nth<=64;nth*=2) {
         parsynt(s, m, A, nth);
     }

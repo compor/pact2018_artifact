@@ -239,17 +239,17 @@ int main(int argc, char *argv[])
 
 	cout << "real value: " << x[N/5*3] << endl;
 	serial(alpha, beta, x, y_seq);
-	fout << "des_parallel\t";
+	fout << "des-our-vec1\t";
 	for(int nth=1; nth<=64;nth*=2) {
 		parallel(alpha, beta, x, y_par, nth);
 	}
 	fout << endl;
 
-	fout1 << "des_simd+mimd\t";
+	fout1 << "des-our-vec2\t";
 	for(int nth=1; nth<=64;nth*=2) {
 		simd_mimd(alpha, beta, x, y_par, nth);
 	}
-	fout1 << endl;
+	fout << endl;
 
 	return 0;
 }

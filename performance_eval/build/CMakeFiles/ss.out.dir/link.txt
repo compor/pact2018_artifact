@@ -1,1 +1,0 @@
-/opt/intel/compilers_and_libraries_2017.4.196/linux/bin/intel64/icpc    -rdynamic CMakeFiles/ss.out.dir/ss.cpp.o  -o ss.out -lpthread 

@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 	}
 
 	serial(nlines, A);
-	fout << "agg1\t";
+	fout << "agg1-our-vec1\t";
 	for(int nth=1; nth<=64;nth*=2) {
 		parallel(nlines, A, nth);
 	}

@@ -201,18 +201,18 @@ int main()
     A[i] = rand() % 100 - 50;
   }
   serial(s, m, A);
-  fout << "mps_parallel\t";
+  fout << "mps-our-nonvec\t";
   for(int nth=1; nth<=64;nth*=2) {
     parallel(s, m, A, nth);
   }
   fout << endl;
-  fout1 << "mps_simd+mimd\t";
+  fout << "mps-our-vec2\t";
   for(int nth=1; nth<=64;nth*=2) {
     simd_mimd(s, m, A, nth);
   }
-  fout1 << endl;
+  fout << endl;
 
-  fout << "mps_parsynt\t";
+  fout << "mps-parsynt\t";
   
   for(int nth=1; nth<=64;nth*=2) {
 

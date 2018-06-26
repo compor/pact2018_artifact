@@ -216,19 +216,19 @@ int main()
     A[i] = rand() % 2;
   }
   serial(bal, ofs, A);
-  fout << "balanced_parallel\t";
+  fout << "balanced-our-nonvec\t";
   for(int nth=1; nth<=64;nth*=2) {
     parallel(bal, ofs, A, nth);
   }
   fout << endl;
 
-  fout1 << "balanced_simd+mimd\t";
+  fout << "balanced-our-vec2\t";
   for(int nth=1; nth<=64;nth*=2) {
     simd_mimd(bal, ofs, A, nth);
   }
-  fout1 << endl;
+  fout << endl;
 
-  fout << "balanced_parsynt\t";
+  fout << "balanced-parsynt\t";
   for(int nth=1; nth<=64;nth*=2) {
     parsynt(bal, ofs, A, nth);
   }
