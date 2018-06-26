@@ -16,7 +16,6 @@ int serial_time, par_time;
 struct timeval tv1, tv2;
 struct timezone tz1, tz2;
 ofstream fout("speedups.txt", fstream::out|fstream::app);
-ofstream fout1("fullspeedups.txt", fstream::out|fstream::app);
 
 
 
@@ -142,7 +141,7 @@ void simd_mimd(float alpha, float beta, float *x, float *y_par, int nth) {
   par_time =  1000000*(tv2.tv_sec - tv1.tv_sec) + tv2.tv_usec - tv1.tv_usec;
   cout << "parallel time: " << par_time << endl;
   cout << "speed up: " << 1.0 * serial_time / par_time << endl;
-  fout1 <<  1.0 * serial_time / par_time << "\t";
+  fout <<  1.0 * serial_time / par_time << "\t";
 }
 
 
@@ -245,7 +244,7 @@ int main(int argc, char *argv[])
 	}
 	fout << endl;
 
-	fout1 << "des-our-vec2\t";
+	fout << "des-our-vec2\t";
 	for(int nth=1; nth<=64;nth*=2) {
 		simd_mimd(alpha, beta, x, y_par, nth);
 	}

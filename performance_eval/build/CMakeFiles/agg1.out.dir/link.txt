@@ -1,0 +1,1 @@
+/opt/intel/compilers_and_libraries_2017.4.196/linux/bin/intel64/icpc    -rdynamic CMakeFiles/agg1.out.dir/agg1.cpp.o  -o agg1.out -lpthread 
