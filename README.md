@@ -151,7 +151,7 @@ Now, everything is ready!
 ## Usage
 You can try our tool with the `par.py` script provided in `loop_bench` directory. 
 
-Let us start from the simplest example, you can take a look at `sum.cpp', which computes the sum of an array sequentially. 
+Let us start from the simplest example, you can take a look at `sum.cpp`, which computes the sum of an array sequentially. 
 Parallelize the sequential loop with our tool:
 
 `./par.py sum.cpp`
