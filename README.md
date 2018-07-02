@@ -132,6 +132,7 @@ cd pact2018_artifact
 mkdir build
 cd build
 cmake ..
+make
 cd ..
 ```
 
