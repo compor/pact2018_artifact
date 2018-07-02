@@ -18,7 +18,7 @@ Take a look at a simple reduction example:
 This loop comptes the sum of the elements in array `A`. We know that the computation can be parallelized by dividing the array into multiple chunks and computing the partial sums of different chunks in parallel. The partial sums are then added up to get the sum of the whole array. The parallelized code looks something like:
 
 ```cpp
-// compute the partial sums in parallel
+  // compute the partial sums in parallel
   int S_Vs[_N_THREADS]; // stores the partial sum from each thread
   int BSIZE = N / _N_THREADS;
   thread *workers = new thread[_N_THREADS];
@@ -35,7 +35,7 @@ This loop comptes the sum of the elements in array `A`. We know that the computa
      S_Vs[tid] = vs;
     });
   } 
-// add up the partial sums
+  // add up the partial sums
   int s = 0;
   for (int tid = 0; tid < _N_THREADS; tid++) {
     workers[tid].join();
@@ -64,8 +64,8 @@ However, this loop is a linear recurrence and can be parallelized as a reduction
   thread *workers = new thread[_N_THREADS];
   
   for (int tid = 0; tid < _N_THREADS; tid++) {
-// The array A is divided into chunks, each chunk is assigned to a thread 
-// The computation among chunks are independent and conducted in parallel
+    // The array A is divided into chunks, each chunk is assigned to a thread 
+    // The computation among chunks are independent and conducted in parallel
     workers[tid] = thread([=, &S_Vs] {
       float Vs[2] = {0, 1};
       int start_pos = max(1, tid * BSIZE);
@@ -80,7 +80,7 @@ However, this loop is a linear recurrence and can be parallelized as a reduction
     });
   } 
   
-// The results of different chunks are merged with little overhead
+  // The results of different chunks are merged with little overhead
   float s = x[0];
   for (int tid = 0; tid < _N_THREADS; tid++) {
     workers[tid].join(); 
