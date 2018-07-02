@@ -5,7 +5,7 @@ Please see our PACT2018 paper "Revealing Parallel Scans and Reductions in Recurr
 The tool basically has two parts: an LLVM IR pass that analyzes and derives the function types in a recurrence loop, and a code generation tool that produces the parallelized code based on the analysis results. 
 
 
-## Demo
+## Appetizer
 Take a look at a simple reduction example:
 
 ```cpp
@@ -15,7 +15,7 @@ Take a look at a simple reduction example:
   }
 ```
 
-This loop comptes the sum of the elements in array `A`. We know that the computation can be parallelized by dividing the array into multiple chunks and compute partial sums of different chunks in parallel. The partial sums are then added up to get the sum of all chunks. The parallelized code looks something like:
+This loop comptes the sum of the elements in array `A`. We know that the computation can be parallelized by dividing the array into multiple chunks and computing the partial sums of different chunks in parallel. The partial sums are then added up to get the sum of the whole array. The parallelized code looks something like:
 
 ```cpp
 // compute the partial sums in parallel
