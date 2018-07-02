@@ -95,7 +95,7 @@ Read our paper:
 *Revealing Parallel Scans and Reductions in Recurrences through Function Reconstruction. Peng Jiang, Linchuan Chen, Gagan Agrawal. PACT 2018.* 
 
 And you will find the steps and algorithms to parallelize such loops are actually very straightforward. 
-The above parallel codes are generated automatically by this tool, and it can parallelize more complicated loops than this simple example.  
+Our tool generates the above parallel codes automatically, and it can parallelize more complicated loops than this simple example.  
 
 
 
