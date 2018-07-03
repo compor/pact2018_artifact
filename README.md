@@ -140,7 +140,7 @@ To compile the code generation tool, first open to the source code directory:
 
 `cd CodeGen`
 
-Open the Makefile with any editor, and change `LLVM_SRC_PATH` and `LLVM_BUILD_PATH` on the top to the proper directories. `LLVM_SRC_PATH` is the directory of your LLVM source code, and `LLVM_BUILD_PATH` is the path where you have your LLVM installed.
+Open the Makefile with any editor, and set `LLVM_SRC_PATH` and `LLVM_BUILD_PATH` to proper directories. `LLVM_SRC_PATH` is the directory of your LLVM source code, and `LLVM_BUILD_PATH` is the path where you have your LLVM installed.
 Then, compile it with:
 
 `make`
@@ -157,7 +157,7 @@ Parallelize the sequential loop with our tool:
 `./par.py sum.cpp`
 
 The `par.py` script calls our tool and generates the parallelized loop in `sum_par.cpp`. 
-Take a loop at that file, you can see that the sequential loop is parallelized as two parts: a parallel sampling part and a sequential propagation part. 
+Take a look at that file, you can see that the sequential loop is parallelized as two parts: a parallel sampling part and a sequential propagation part. 
 You can also see two more files are generated in the directory `sum.frel` and `sum.frel.png`. 
 `sum.frel` is the output of the LLVM pass -- it stores the function relation graph  as tuples of `[source-node, dest-node, function-type, coefficient-if-available, pass-origin-or-not]`. And `sum.frel.png` is a plot of this graph -- you can open it with any png viewer. (Read the paper for more explanation if you are interested!)
 
@@ -166,6 +166,9 @@ Now you can try to parallelize other loops in this directory following the same 
 `./par.py mss.cpp` 
 
 will parallelized the loop for computing the maximum segmented sum. The parallelized code is generated in `mss_par.cpp`. The function relation graph for this loop is stored in `mss.frel` and plotted in `mss.frel.png`. 
+
+To try with other loops, make sure to put your loop in a function (named `serial` in our test loops) and the recurrence variables are declared as local variables of the function. 
+Also, make sure your loop follows the syntax defined in Figure 1 in our paper. 
 
 ## Note
 The tool is currently a prototype, especially the code genenration part. 
