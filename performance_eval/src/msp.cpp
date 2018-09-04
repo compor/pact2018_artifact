@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
   float *A = new float[N];
 
   for(int i=0; i<N; i++) {
-    A[i] = 2.0 * (rand() / INT_MAX) - 1;
+    A[i] = 2.0 * rand() / INT_MAX - 1;
   }
   serial(ma, mi, m, A);
   fout << "msp-our-vec1\t";
