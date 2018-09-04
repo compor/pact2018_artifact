@@ -1,4 +1,4 @@
-# FRAP: Function Reconstruction based Automatic Parallelization
+# Function Reconstruction based Automatic Parallelization
 
 This is a compiler tool for automatic parallelization of recurrence loops based on *function reconstruction*. 
 Please see our PACT2018 paper "Revealing Parallel Scans and Reductions in Recurrences through Function Reconstruction" for the theories and algorithms. 
